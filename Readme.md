@@ -55,7 +55,6 @@
 <p align="left">
 <a href="mailto:jjuuu2727@gmail.com"><img src="https://img.shields.io/badge/Email-D14836?style=flat-square&logo=Gmail&logoColor=white"/></a>
 <a href="https://github.com/jjuuu999"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/></a>
-<a href="https://linkedin.com/in/jjuuu999"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=LinkedIn&logoColor=white"/></a>
 </p>
 
 > **탄탄한 도메인 지식과 데이터 기술을 결합하여, 리스크 관리의 실무적 해답을 찾아나가겠습니다.**
