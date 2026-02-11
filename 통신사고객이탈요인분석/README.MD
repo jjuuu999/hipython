@@ -84,6 +84,26 @@ df_new['TotalCharges'] = pd.to_numeric(df_new['TotalCharges'], errors='coerce')
 df_new['TotalCharges'] = df_new['TotalCharges'].fillna(0)
 ```
 
+**MonthlyCharges — 동일 서비스 조합 표본으로 검증 후 대체**
+
+단순 최빈값 대체 대신, 해당 고객(2961번)과 서비스 조합이 동일한 표본을 직접 추출해서 `TotalCharges / tenure` 값과 비교했습니다. 결과가 비슷해 같은 방식으로 대체했습니다.
+
+```python
+# 동일 서비스 조합 표본 5명 추출해서 요금 비교
+sample_check = df_new[
+    (df_new['InternetService'] == 'DSL') & 
+    (df_new['OnlineSecurity'] == 'No') & 
+    (df_new['OnlineBackup'] == 'Yes') & 
+    (df_new['TechSupport'] == 'Yes') & 
+    (df_new['StreamingTV'] == 'No') & 
+    (df_new['StreamingMovies'] == 'No')
+].head(5)
+
+display(sample_check[['MonthlyCharges', 'TotalCharges', 'tenure']])
+# TotalCharges / tenure ≈ MonthlyCharges 확인 → 54.05로 직접 대체
+df_new.loc[2961, 'MonthlyCharges'] = 54.05
+```
+
 **Contract, PaymentMethod — 최빈값으로 대체**
 
 ```python
@@ -130,6 +150,8 @@ sns.kdeplot(data=df_new, x='tenure', hue='Churn', fill=True)
 이탈은 **가입 초기 0~10개월**에 집중되며 20개월 이후 안정화됩니다.
 월 요금 **$80~$100** 구간에서 이탈률 최고치(36.1%)를 기록했습니다.
 
+범주형 변수별로 확인한 결과, **Month-to-month 계약**, **Fiber optic 인터넷**, **Electronic check 결제(수동)**, **부양가족·파트너 없는 경우**, **전자 청구서 미사용** 고객에서 이탈률이 상대적으로 높게 나타났습니다.
+
 ### 고위험군 분석 — 가입 기간 × 월 요금
 
 ```python
@@ -159,5 +181,6 @@ sns.heatmap(df_corr.corr(), annot=True, fmt='.2f', cmap='coolwarm')
 Churn과 가장 높은 양의 상관성 → **Month-to-month 계약**
 Churn과 가장 높은 음의 상관성 → **tenure(가입 기간)**
 
+히트맵에서 Churn과의 상관성을 보면 Month-to-month 계약이 가장 두드러지므로 이 고객군을 집중 관리할 필요가 있습니다. 그 다음으로 Fiber optic 고가 요금제 이용 고객, Electronic check 수동 결제 고객 순으로 상관성이 높았습니다. 반대로 tenure가 길수록 이탈이 줄어드는 경향이 뚜렷해, 장기 계약을 유지할 수 있는 유인을 만드는 것이 핵심 전략이 될 수 있습니다.
 
 > 이탈 고객 평균 요금 **$74.4** vs 유지 고객 평균 요금 **$61.3**
