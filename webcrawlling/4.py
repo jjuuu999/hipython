@@ -8,4 +8,4 @@ with sync_playwright() as p:
   page.goto('https://quotes.toscrape.com/')
   html = page.content()
   soup = BeautifulSoup(html, 'lxml')
-  print(soup.find('span', class_='text'))
+  print(soup.find('span', class_='text').get_text())
