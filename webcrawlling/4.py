@@ -12,12 +12,16 @@ with sync_playwright() as p:
   print(soup.select_one('span.text').text)
   print(soup.select_one('small.author').text)
   
-  quotes = soup.select('div.quote')
-  for quote in quotes :
-    print(quote.select_one('span.text').text)
-    print(quote.select_one('small.author').text)
-    print('*'*20)
+  quotes = soup.select('div.quote') # 리스트로 반환
+  quotes_list = []
   
+  for quote in quotes :
+    quotes_list.append({'quote':quote.select_one('span.text').text,
+                       'author':quote.select_one('small.author').text})
+  
+  import pandas as pd
+  df = pd.DataFrame(quotes_list)  
+  print(df)
   
   page.wait_for_timeout(3000)
   browser.close()
