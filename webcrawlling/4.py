@@ -12,9 +12,14 @@ with sync_playwright() as p:
   print(soup.select_one('span.text').text)
   print(soup.select_one('small.author').text)
   
-  print(soup.select('div.quote'))
+  quotes = soup.select('div.quote')
+  for quote in quotes :
+    print(quote.select_one('span.text').text)
+    print(quote.select_one('small.author').text)
+    print('*'*20)
   
-  page.wait_for_timeout(5000)
+  
+  page.wait_for_timeout(3000)
   browser.close()
   
  
