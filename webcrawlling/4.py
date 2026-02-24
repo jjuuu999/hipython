@@ -1,7 +1,11 @@
 # beautifulsoup
 from playwright.sync_api import sync_playwright
+from bs4 import BeautifulSoup
 
-def run_crawler():
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
-        page = browser.new_page()
+with sync_playwright() as p:
+  browser = p.chromium.launch(headless=False)
+  page = browser.new_page()
+  page.goto('https://quotes.toscrape.com/')
+  html = page.content()
+  soup = BeautifulSoup(html, 'lxml')
+  print(soup.find('span', class_='text'))
